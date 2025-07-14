@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular - Ingeniería Empresarial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f5f0;
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      color: #c0b4f8;
+    }
+    h1 {
+      text-align: center;
+      color: #ef7d9;
+      margin-bottom: 30px;
+    }
+    .ciclo {
+      margin-bottom: 40px;
+    }
+    .ciclo h2 {
+      background: #f0bc4c;
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: #fcfcf8;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+      width: fit-content;
+    }
+    .cursos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 15px;
+    }
+    .curso {
+      border-radius: 16px;
+      padding: 16px;
+      width: 260px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .curso:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    }
+    .curso h3 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+    .curso p {
+      margin: 4px 0;
+      font-size: 16px;
+    }
+    .icono {
+      font-size: 18px;
+      margin-right: 6px;
+    }
+    .bloqueado {
+      background-color: #d4d8e1;
+      color: #919cba;
+      cursor: not-allowed;
+    }
+    .habilitado {
+      background-color: #ef7d9f;
+      color: #ffffff;
+    }
+    .aprobado {
+      background-color: #ffc5c5;
+      color: #ed7d9f;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>💼 Malla Curricular - Ingeniería Empresarial</h1>
+  <div id="contenedor-ciclos"></div>
+  <script>
+    const cursosData = [
+      {
+        ciclo: 1,
+        cursos: [
+          { id: "RRHH1101", nombre: "🎯 Desarrollo del Talento", creditos: 2, detalle: "HT: 2", modalidad: "Virtual" },
+          { id: "MATH1002", nombre: "📐 Complemento Matemático para Ingenieros", creditos: 5, detalle: "HT: 4 | HP: 2", modalidad: "Presencial" },
+          { id: "MAGM1104", nombre: "💼 Introducción a la Ing. Empresarial", creditos: 3, detalle: "HT: 2 | HL: 2", modalidad: "Presencial" },
+          { id: "QUIM1105", nombre: "🧪 Química 1", creditos: 4, detalle: "HT: 2 | HP: 2 | HL: 2", modalidad: "Presencial" },
+          { id: "LENG1001", nombre: "📝 Comunicación 1", creditos: 5, detalle: "HT: 4 | HP: 2", modalidad: "Virtual" },
+          { id: "ECON1203", nombre: "💰 Economía", creditos: 3, detalle: "HT: 2 | HP: 2", modalidad: "Presencial" }
+        ]
+      },
+      {
+        ciclo: 2,
+        cursos: [
+          { id: "MATH1003", nombre: "📐 Matemática Básica para Ingeniería", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["MATH1002"], modalidad: "Remoto" },
+          { id: "LENG1002", nombre: "📝 Comunicación 2", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["LENG1001"], modalidad: "Virtual" },
+          { id: "CONT1208", nombre: "📊 Gestión Contable", creditos: 3, detalle: "HT: 2 | HP: 2", modalidad: "Presencial" },
+          { id: "HUMA1306", nombre: "🌍 Ciudadanía Global", creditos: 2, detalle: "HT: 2", modalidad: "Virtual" },
+          { id: "INVE1101", nombre: "📖 Metodología Universitaria", creditos: 3, detalle: "HT: 2 | HP: 2", modalidad: "Virtual" }
+        ]
+      },
+      {
+        ciclo: 3,
+        cursos: [
+          { id: "MATH1101A", nombre: "📐 Cálculo 1", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["MATH1003"], modalidad: "Remoto" },
+          { id: "ISOF1202A", nombre: "💾 Gestión de Base de Datos", creditos: 3, detalle: "HT: 2 | HL: 2", modalidad: "Presencial" },
+          { id: "STAT1203A", nombre: "📊 Probabilidad y Estadística", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["MATH1003"], modalidad: "Virtual" },
+          { id: "IDIO1401", nombre: "🗣️ Pre Beginner 1", creditos: 1, detalle: "HT: 1", modalidad: "Virtual" },
+          { id: "LENG1003", nombre: "📝 Comunicación 3", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["LENG1002"], modalidad: "Presencial" },
+          { id: "INFO1120A", nombre: "💻 Herramientas Informáticas", creditos: 2, detalle: "HT: 2", modalidad: "Virtual" }
+        ]
+      },
+      {
+        ciclo: 4,
+        cursos: [
+          { id: "MATH1202A", nombre: "📐 Cálculo 2", creditos: 5, detalle: "HT: 4 | HP: 2", req: ["MATH1101A"], modalidad: "Remoto" },
+          { id: "INFO1204A", nombre: "💻 Sistemas de Información Empresarial", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["ISOF1202A"], modalidad: "Presencial" },
+          { id: "STAT1204", nombre: "📊 Herramientas Estadísticas para la Investigación", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["STAT1203A"], modalidad: "Presencial" },
+          { id: "FINN1319", nombre: "💰 Ingeniería Económica y Finanzas", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["MATH1101A"], modalidad: "Presencial" },
+          { id: "RRHH1303", nombre: "👥 Empleabilidad", creditos: 4, detalle: "HT: 2 | PC: 4", req: ["RRHH1101"], modalidad: "Virtual" },
+          { id: "MARK1203B", nombre: "📈 Gerencia de Marketing", creditos: 4, detalle: "HT: 4", modalidad: "Virtual" }
+        ]
+      },
+      {
+        ciclo: 5,
+        cursos: [
+          { id: "INFO1308A", nombre: "🖥️ Tecnologías de Información Aplicadas a los Negocios", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["ISOF1202A"], req_extra: "80_CREDITOS", modalidad: "Presencial" },
+          { id: "OPER1308A", nombre: "🏗️ Ingeniería de Productos y Procesos", creditos: 6, detalle: "HT: 6", req: ["MARK1203B"], modalidad: "Presencial" },
+          { id: "FINN1313", nombre: "💵 Gestión de Costos", creditos: 3, detalle: "HT: 2 | HP: 2", req: ["CONT1208"], modalidad: "Virtual" },
+          { id: "HUMA1111", nombre: "🌱 Responsabilidad Social", creditos: 2, detalle: "HT: 2", modalidad: "Virtual" },
+          { id: "FIS11207", nombre: "⚛️ Física 1", creditos: 4, detalle: "HT: 2 | HP: 2 | HL: 2", req: ["MATH1003"], modalidad: "Presencial" },
+          { id: "IDIO1402", nombre: "🗣️ Pre Beginner 2", creditos: 1, detalle: "HT: 1", req: ["IDIO1401"], modalidad: "Virtual" }
+        ]
+      },
+      {
+        ciclo: 6,
+        cursos: [
+          { id: "MAGM1313A", nombre: "🔄 Gestión de Procesos de Negocios (BPM)", creditos: 4, detalle: "HT: 4", req: ["OPER1308A"], modalidad: "Presencial" },
+          { id: "INVE1301", nombre: "📝 Metodología de la Investigación", creditos: 3, detalle: "HT: 2 | HP: 2", req: ["INVE1101"], modalidad: "Virtual" },
+          { id: "FINN1408A", nombre: "🌍 Finanzas Internacionales", creditos: 4, detalle: "HT: 4", req: ["FINN1319"], modalidad: "Presencial" },
+          { id: "MAGM1311A", nombre: "🏛️ Arquitectura Empresarial", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["INFO1308A"], modalidad: "Presencial" },
+          { id: "OPER1405R", nombre: "📐 Investigación de Operaciones", creditos: 5, detalle: "HT: 4 | HL: 2", req: ["MATH1202A"], modalidad: "Remoto" }
+        ]
+      },
+      {
+        ciclo: 7,
+        cursos: [
+          { id: "SUPP1405", nombre: "🚚 Gerencia de la Cadena de Suministros", creditos: 4, detalle: "HT: 4", req: ["MAGM1313A"], modalidad: "Remoto" },
+          { id: "EMPR1403", nombre: "💡 Innovación y Emprendimiento", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["MARK1203B"], modalidad: "Presencial" },
+          { id: "HUMA1406", nombre: "🤝 Proyecto Social", creditos: 1, detalle: "HT: 1", req: ["HUMA1111"], modalidad: "Virtual" },
+          { id: "COME1412", nombre: "🧭 Dirección de Procesos Comerciales y TI", creditos: 3, detalle: "HT: 2 | HP: 2", req: ["OPER1308A"], modalidad: "Presencial" },
+          { id: "RRHH1306A", nombre: "👤 Procesos de Gestión de Personas y TI", creditos: 5, detalle: "HT: 4 | HL: 2", req: ["INFO1204A"], modalidad: "Presencial" },
+          { id: "FINN1404B", nombre: "📊 Formulación y Evaluación de Proyectos", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["FINN1319"], modalidad: "Presencial" }
+        ]
+      },
+      {
+        ciclo: 8,
+        cursos: [
+          { id: "COME1401A", nombre: "🧩 Gestión Estratégica Comercial", creditos: 3, detalle: "HT: 3", req: ["COME1412"], modalidad: "Presencial" },
+          { id: "MAGM1406", nombre: "🏢 Gestión del Cambio Organizacional", creditos: 3, detalle: "HT: 3", req: ["MAGM1313A"], modalidad: "Presencial" },
+          { id: "EMPR1406", nombre: "🚀 Emprendimiento Empresarial", creditos: 4, detalle: "HT: 3 | HL: 2", req: ["EMPR1403"], modalidad: "Presencial" },
+          { id: "SEGU1405", nombre: "💼 Finanzas Corporativas y Seguros", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["FINN1408A"], modalidad: "Presencial" },
+          { id: "PROY1406", nombre: "📋 Gestión de Proyectos Empresariales", creditos: 4, detalle: "HT: 3 | HL: 2", req: ["FINN1404B"], modalidad: "Presencial" }
+        ]
+      },
+      {
+        ciclo: 9,
+        cursos: [
+          { id: "MAGM1416", nombre: "📋 Gerencia de Proyectos", creditos: 4, detalle: "HT: 4", req: ["FINN1404B", "INVE1301", "SUPP1405"], modalidad: "Presencial" },
+          { id: "INVE2009", nombre: "📝 Tesis", creditos: 3, detalle: "HT: 2 | HP: 2 | HL: 2", req: ["INVE1301", "SUPP1405"], modalidad: "Presencial" },
+          { id: "MAGM1514A", nombre: "🏢 Sistemas Integrados de Gestión", creditos: 4, detalle: "HT: 4", req: ["MAGM1406"], modalidad: "Presencial" },
+          { id: "ELECTIVO1", nombre: "⭐ Curso Electivo 1", creditos: 3, detalle: "", req: ["PROY1406"], opciones: [
+            { id: "MAGM1538", nombre: "📊 Indicadores de Transformación Digital", creditos: 3, modalidad: "Remoto" },
+            { id: "ITEC1523A", nombre: "🖥️ Gestión de Servicios y Tecnologías de Información", creditos: 3, modalidad: "Presencial" }
+          ]}
+        ]
+      },
+      {
+        ciclo: 10,
+        cursos: [
+          { id: "COME1507A", nombre: "🧭 E-Business y Negocios Internacionales", creditos: 3, detalle: "HT: 2 | HL: 2", req: ["MAGM1514A"], modalidad: "Presencial" },
+          { id: "TIIN1005", nombre: "📝 Trabajo de Investigación", creditos: 5, detalle: "HT: 4 | HL: 4", req: ["INVE2009"], modalidad: "Virtual" },
+          { id: "MAGM1516A", nombre: "🏢 Integración Empresarial", creditos: 4, detalle: "HT: 4", req: ["MAGM1514A"], modalidad: "Presencial" },
+          { id: "ELECTIVO2", nombre: "⭐ Curso Electivo 2", creditos: 3, detalle: "", req: ["ELECTIVO1"], opciones: [
+            { id: "MAGM1529", nombre: "🧭 Dirección Estratégica de TI", creditos: 3, modalidad: "Presencial" },
+            { id: "NETI1421A", nombre: "💻 Gobierno de Tecnología de Información", creditos: 2, modalidad: "Presencial" }
+          ]}
+        ]
+      }
+    ];
+
+    const contenedor = document.getElementById("contenedor-ciclos");
+
+    // Función para renderizar la malla curricular
+    function renderizarMalla() {
+      contenedor.innerHTML = ''; 
+      let creditosAprobados = calcularCreditosAprobados();
+
+      cursosData.forEach(({ ciclo, cursos }) => {
+        const cicloDiv = document.createElement("div");
+        cicloDiv.className = "ciclo";
+        cicloDiv.innerHTML = `<h2>📘 Ciclo ${ciclo}</h2>`;
+        const cursosDiv = document.createElement("div");
+        cursosDiv.className = "cursos";
+
+        cursos.forEach(curso => {
+          const div = document.createElement("div");
+          div.dataset.id = curso.id;
+          if (curso.req) div.dataset.req = curso.req.join(",");
+          
+          let estado = "bloqueado"; 
+          if (!curso.req || todosRequisitosAprobados(curso.req, creditosAprobados)) {
+            estado = "habilitado";
+          }
+          if (localStorage.getItem(curso.id) === "aprobado") {
+            estado = "aprobado";
+          }
+
+          let iconoModalidad = "";
+          if (curso.modalidad === "Presencial") iconoModalidad = "🏢";
+          if (curso.modalidad === "Virtual") iconoModalidad = "💻";
+          if (curso.modalidad === "Remoto") iconoModalidad = "📡";
+
+          // Manejar cursos electivos con opciones
+          if (curso.opciones) {
+            const electivoAprobado = curso.opciones.some(opcion => localStorage.getItem(opcion.id) === "aprobado");
+            if (electivoAprobado) {
+              estado = "aprobado";
+            } else if (todosRequisitosAprobados(curso.req, creditosAprobados)) {
+              estado = "habilitado";
+            }
+          }
+          
+          div.className = `curso ${estado}`;
+          div.innerHTML = `
+            <h3>${curso.nombre}</h3>
+            <p><span class="icono">📚</span> Créditos: ${curso.creditos}</p>
+            ${curso.detalle ? `<p><span class="icono">⏱</span> ${curso.detalle}</p>` : ''}
+            ${curso.modalidad ? `<p><span class="icono">${iconoModalidad}</span> ${curso.modalidad}</p>` : ''}
+          `;
+          
+          // Si es un curso electivo, mostrar las opciones
+          if (curso.opciones) {
+            let opcionesHTML = `<p>Opciones:</p><ul>`;
+            curso.opciones.forEach(opcion => {
+              const opcionAprobada = localStorage.getItem(opcion.id) === "aprobado";
+              const iconoOpcion = opcion.modalidad === "Presencial" ? "🏢" : (opcion.modalidad === "Virtual" ? "💻" : "📡");
+              opcionesHTML += `<li data-id="${opcion.id}" class="${opcionAprobada ? 'aprobado-opcion' : ''}">
+                <span class="icono">${iconoOpcion}</span> ${opcion.nombre} (${opcion.creditos} CR)
+              </li>`;
+            });
+            opcionesHTML += `</ul>`;
+            div.innerHTML += opcionesHTML;
+          }
+
+          cursosDiv.appendChild(div);
+        });
+
+        cicloDiv.appendChild(cursosDiv);
+        contenedor.appendChild(cicloDiv);
+      });
+    }
+
+    // Función para calcular los créditos aprobados
+    function calcularCreditosAprobados() {
+      let totalCreditos = 0;
+      cursosData.forEach(ciclo => {
+        ciclo.cursos.forEach(curso => {
+          if (localStorage.getItem(curso.id) === "aprobado") {
+            totalCreditos += curso.creditos;
+          }
+        });
+      });
+      return totalCreditos;
+    }
+
+    // Función para verificar si los requisitos están aprobados
+    function todosRequisitosAprobados(requisitos, creditosAprobados) {
+      if (!requisitos || requisitos.length === 0) return true;
+      
+      const requisitosCumplidos = requisitos.every(reqId => {
+        if (reqId === "80_CREDITOS") {
+          return creditosAprobados >= 80;
+        }
+        
+        // Manejar requisitos de electivos
+        if (reqId === "ELECTIVO1") {
+          const electivo1Curso = cursosData.find(c => c.ciclo === 9).cursos.find(cu => cu.id === "ELECTIVO1");
+          return electivo1Curso.opciones.some(opcion => localStorage.getItem(opcion.id) === "aprobado");
+        }
+
+        const reqCurso = document.querySelector(`.curso[data-id="${reqId}"]`);
+        return reqCurso && reqCurso.classList.contains("aprobado");
+      });
+      
+      return requisitosCumplidos;
+    }
+
+    // Función principal para manejar los clics
+    document.addEventListener("click", function(e) {
+      const curso = e.target.closest(".curso");
+      const opcion = e.target.closest("li");
+
+      if (!curso && !opcion) return;
+
+      if (opcion) {
+        // Lógica para marcar opciones de electivos
+        const id = opcion.dataset.id;
+        const electivoId = e.target.closest(".curso").dataset.id;
+        const electivoOpciones = cursosData.find(c => c.cursos.some(cu => cu.id === electivoId)).cursos.find(cu => cu.id === electivoId).opciones;
+        
+        // Desmarcar todas las opciones del mismo electivo
+        electivoOpciones.forEach(op => localStorage.removeItem(op.id));
+        
+        // Marcar la opción seleccionada
+        localStorage.setItem(id, "aprobado");
+        
+      } else if (curso) {
+        // Lógica para marcar cursos normales
+        if (curso.classList.contains("bloqueado")) return;
+
+        const id = curso.dataset.id;
+        if (curso.classList.contains("aprobado")) {
+          localStorage.removeItem(id);
+        } else {
+          localStorage.setItem(id, "aprobado");
+        }
+      }
+
+      renderizarMalla();
+    });
+
+    // Renderizar la malla al cargar la página
+    renderizarMalla();
+  </script>
+</body>
+</html>
