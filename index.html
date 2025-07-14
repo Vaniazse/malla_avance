@@ -1,0 +1,48 @@
+const contenedor = document.getElementById("contenedor-ciclos");
+
+    cursosData.forEach(({ ciclo, cursos }) => {
+      const cicloDiv = document.createElement("div");
+      cicloDiv.className = "ciclo";
+      cicloDiv.innerHTML = `<h2>📘 Ciclo ${ciclo}</h2>`;
+
+      const cursosDiv = document.createElement("div");
+      cursosDiv.className = "cursos";
+
+      cursos.forEach(curso => {
+        const div = document.createElement("div");
+        div.className = curso.req ? "curso bloqueado" : "curso habilitado";
+        div.dataset.id = curso.id;
+        if (curso.req) div.dataset.req = curso.req.join(",");
+        div.innerHTML = `
+          <h3>${curso.nombre}</h3>
+          <p><span class="icono">📚</span> Créditos: ${curso.creditos}</p>
+          <p><span class="icono">⏱</span> ${curso.detalle}</p>
+        `;
+        cursosDiv.appendChild(div);
+      });
+
+      cicloDiv.appendChild(cursosDiv);
+      contenedor.appendChild(cicloDiv);
+    });
+
+    document.addEventListener("click", function(e) {
+      const curso = e.target.closest(".curso");
+      if (!curso) return;
+
+      const aprobado = curso.classList.contains("aprobado");
+      curso.classList.remove("bloqueado", "habilitado", "en-curso", "aprobado");
+      curso.classList.add(aprobado ? "habilitado" : "aprobado");
+
+      const id = curso.dataset.id;
+      document.querySelectorAll(`.curso[data-req]`).forEach(dep => {
+        const requisitos = dep.dataset.req.split(",");
+        const todosAprobados = requisitos.every(req => {
+          return document.querySelector(`.curso[data-id="${req}"]`).classList.contains("aprobado");
+        });
+        dep.classList.remove("habilitado", "bloqueado");
+        dep.classList.add(todosAprobados ? "habilitado" : "bloqueado");
+      });
+    });
+  </script>
+</body>
+</html>

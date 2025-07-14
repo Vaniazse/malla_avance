@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular - Ingeniería Empresarial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fff9fb;
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #cc66a1;
+      margin-bottom: 30px;
+    }
+    .ciclo {
+      margin-bottom: 40px;
+    }
+    .ciclo h2 {
+      background: #d9c9f3;
+      padding: 10px 20px;
+      border-radius: 12px;
+      color: #4d2c72;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+      width: fit-content;
+    }
+    .cursos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 15px;
+    }
+    .curso {
+      border-radius: 16px;
+      padding: 16px;
+      width: 260px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .curso:hover {
+      transform: scale(1.03);
+    }
+    .curso h3 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+    }
+    .curso p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+    .icono {
+      font-size: 18px;
+      margin-right: 6px;
+    }
+
+    .bloqueado {
+      background-color: #cce5f7;
+      color: #888;
+    }
+    .habilitado {
+      background-color: #d9c9f3;
+      color: #4d2c72;
+    }
+    .en-curso {
+      background-color: #e7f4ec;
+      color: #3d6b54;
+    }
+    .aprobado {
+      background-color: #ffe3f0;
+      color: #cc66a1;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>💼 Malla Curricular - Ingeniería Empresarial</h1>
+
+  <div class="ciclo">
+    <h2>📘 Ciclo 1</h2>
+    <div class="cursos">
+      <div class="curso habilitado" data-id="RRHH1101">
+        <h3>🎯 Desarrollo del Talento</h3>
+        <p><span class="icono">📚</span> Créditos: 2</p>
+        <p><span class="icono">⏱</span> Horas Teóricas: 2</p>
+      </div>
+      <div class="curso habilitado" data-id="MATH1002">
+        <h3>📐 Complemento Matemático</h3>
+        <p><span class="icono">📚</span> Créditos: 5</p>
+        <p><span class="icono">⏱</span> HT: 4 | HP: 2</p>
+      </div>
+      <div class="curso habilitado" data-id="MAGM1104">
+        <h3>💼 Introducción a la Ing. Empresarial</h3>
+        <p><span class="icono">📚</span> Créditos: 3</p>
+        <p><span class="icono">⏱</span> HT: 2 | HL: 2</p>
+      </div>
+      <div class="curso habilitado" data-id="QUIM1105">
+        <h3>🧪 Química 1</h3>
+        <p><span class="icono">📚</span> Créditos: 4</p>
+        <p><span class="icono">⏱</span> HT: 2 | HP: 2 | HL: 2</p>
+      </div>
+      <div class="curso habilitado" data-id="LENG1001">
+        <h3>📝 Comunicación 1</h3>
+        <p><span class="icono">📚</span> Créditos: 5</p>
+        <p><span class="icono">⏱</span> HT: 4 | HP: 2</p>
+      </div>
+      <div class="curso habilitado" data-id="ECON1203">
+        <h3>💰 Economía</h3>
+        <p><span class="icono">📚</span> Créditos: 3</p>
+        <p><span class="icono">⏱</span> HT: 2 | HP: 2</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cursos = document.querySelectorAll('.curso');
+
+    cursos.forEach(curso => {
+      curso.addEventListener('click', () => {
+        if (curso.classList.contains('aprobado')) return;
+
+        curso.classList.remove('habilitado', 'bloqueado', 'en-curso');
+        curso.classList.add('aprobado');
+
+        // Aquí irá la lógica para habilitar cursos relacionados
+        // Por ejemplo, si apruebas Comunicación 1, se habilita Comunicación 2
+        const id = curso.dataset.id;
+        if (id === 'LENG1001') {
+          const siguiente = document.querySelector('[data-id="LENG1002"]');
+          if (siguiente) {
+            siguiente.classList.remove('bloqueado');
+            siguiente.classList.add('habilitado');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
